@@ -21,7 +21,7 @@ function test(code, result) {
         if (STDERR){
             c(`OH NOES WE GOT ERRORS!! ${STDERR.replace(/\n/g, '\n - ')}`) // makes into nice little bullet points :3
         }
-        var newLineRemovedSTDOUT = STDOUT.endsWith('\n')
+        var newLineRemovedSTDOUT = STDOUT.endsWith('\n') // golfed: STDOUT.replace(/\n$/,'');
             ?  STDOUT.substring(0, STDOUT.lastIndexOf('\n'))
             :  STDOUT;
         newLineRemovedSTDOUT != result ? c(`YOU MESSED UP! THE RESULT IS ${newLineRemovedSTDOUT} AND THE DESIRED RESULT WAS ${result}`) : ""
