@@ -4,8 +4,7 @@ import CheddarEval from '../core/eval/eval';
 import CheddarBool from '../core/primitives/Bool';
 import CheddarScope from '../core/env/scope';
 import CheddarAssign from './assign';
-import * as CheddarError from '../core/consts/err';
-import CheddarErrorMessage from '../core/consts/err_msg';
+import Signal from '../signal';
 
 export default class CheddarFor {
     constructor(toks, scope) {
@@ -21,6 +20,7 @@ export default class CheddarFor {
             poola, poolb, poolc, // Token caching
             res, bool, // Storage
             ralloc, // Pending result
+            lres, // Last result
             trs; // Temp
 
         this.toks.shift(); // Dispose `for` guarantee token
@@ -45,6 +45,7 @@ export default class CheddarFor {
             bool = new CheddarBool(SCOPE);
 
             if (bool.init(res) && bool.value === true) {
+                console.log(poolc._Tokens[0]);
                 ralloc = new CheddarExec(
                     poolc._Tokens[0],
                     SCOPE
@@ -52,16 +53,24 @@ export default class CheddarFor {
 
                 ralloc = ralloc.exec();
 
-                trs = new CheddarEval(poolb, SCOPE);
-                trs.exec();
+                if (ralloc instanceof Signal) {
+                    if (ralloc.type === Signal.BREAK)
+                        break;
+                } else {
+                    lres = ralloc;
+                }
 
                 if (typeof ralloc === "string")
                     break;
+
+                trs = new CheddarEval(poolb, SCOPE);
+                trs.exec();
+
             } else {
                 break;
             }
         }
 
-        return ralloc;
+        return lres || new NIL;
     }
 }

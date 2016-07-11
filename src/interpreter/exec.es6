@@ -1,4 +1,5 @@
 import links from './links';
+import Signal from './signal';
 import NIL from './core/consts/nil';
 
 export default class CheddarExec {
@@ -8,6 +9,7 @@ export default class CheddarExec {
         this.Scope = scope;
 
         this.errored = false;
+        this.interrupt = false;
         this.lrep = new NIL;
     }
 
@@ -23,13 +25,16 @@ export default class CheddarExec {
             this.lrep = resp;
         } else if (typeof resp === "undefined") {
             this.lrep = new NIL;
+        } else if (resp instanceof Signal) {
+            this.interrupt = true;
+            this.lrep = resp;
         } else {
             this.lrep = resp;
         }
     }
 
     exec() {
-        while (this.Code[this._csi] && !this.errored)
+        while (this.Code[this._csi] && !this.errored && !this.interrupt)
             this.step();
         return this.lrep;
     }

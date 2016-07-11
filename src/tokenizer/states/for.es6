@@ -1,6 +1,6 @@
 import StatementAssign from './assign';
 import CheddarExpressionToken from './expr';
-import CheddarCodeblock from '../patterns/block';
+import CheddarCodeblock from '../patterns/loopblock';
 import CheddarLexer from '../patterns/EXPLICIT';
 import * as CheddarError from '../consts/err';
 

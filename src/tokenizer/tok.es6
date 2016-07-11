@@ -26,9 +26,10 @@ const SINGLELINE_WHITESPACE = /[\t\f ]/;
 const NEWLINE = /[\r\n]/;
 
 export default class CheddarTokenize extends CheddarLexer {
-    exec(ENDS = "") {
+    exec(ENDS = "", EXTRA = []) {
 
         let MATCH = this.attempt(
+            ...EXTRA,
             S1_ASSIGN,
             S2_IF,
             S2_FOR,
@@ -41,15 +42,17 @@ export default class CheddarTokenize extends CheddarLexer {
             this.Index = MATCH.Index;
 
             // Whether or not it backtracked for a newline
-            let backtracked = false;
+            let backtracked = 0;
 
             while (SINGLELINE_WHITESPACE.test(this.Code[this.Index])) {
-                backtracked = true;
+                backtracked++;
                 this.Index--;
             } /* then { */
             if (backtracked) {
                 if (NEWLINE.test(this.Code[this.Index - 1])) {
                     this.Index--;
+                } else {
+                    this.Index += backtracked;
                 }
             }
 
