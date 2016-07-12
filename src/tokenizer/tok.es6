@@ -28,7 +28,7 @@ const NEWLINE = /[\r\n]/;
 export default class CheddarTokenize extends CheddarLexer {
     exec(ENDS = "", EXTRA = []) {
 
-        let MATCH = this.attempt(
+        let MATCH = this.attemptWith(this,
             ...EXTRA,
             S1_ASSIGN,
             S2_IF,

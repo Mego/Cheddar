@@ -5,7 +5,7 @@ import CheddarLexer from '../patterns/EXPLICIT';
 import * as CheddarError from '../consts/err';
 
 export default class StatementIf extends CheddarLexer {
-    exec() {
+    exec(codeblock) {
         this.open();
 
         if (!this.lookAhead("if"))
@@ -14,9 +14,10 @@ export default class StatementIf extends CheddarLexer {
         this.jumpLiteral("if");
 
         let EXPRESSION = CheddarCustomLexer(CheddarExpressionToken, true);
+        let CODEBLOCK  = CheddarCustomLexer(CheddarCodeblock, codeblock);
 
         // Match the `expr { block }` format
-        let FORMAT = [EXPRESSION, CheddarCodeblock, CheddarError.EXPECTED_BLOCK];
+        let FORMAT = [EXPRESSION, CODEBLOCK, CheddarError.EXPECTED_BLOCK];
 
         // Match initial `if`
         let IF = this.grammar(true, FORMAT);
@@ -44,7 +45,7 @@ export default class StatementIf extends CheddarLexer {
                 this.newToken("else");
                 this.jumpWhite();
 
-                let RUN = this.initParser(CheddarCodeblock);
+                let RUN = this.initParser(CODEBLOCK);
                 let RES = RUN.exec();
 
                 this.Index = RES.Index || RUN.Index;

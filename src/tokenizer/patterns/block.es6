@@ -4,13 +4,13 @@ import CheddarCustomParser from '../parsers/custom';
 import * as CheddarError from '../consts/err';
 
 export default class CheddarCodeblock extends CheddarLexer {
-    exec() {
+    exec(parser = CheddarTokenize) {
         if (!this.lookAhead("{"))
             return CheddarError.EXIT_NOTFOUND;
 
         this.jumpLiteral("{");
 
-        let RUN = this.initParser(CheddarCustomParser(CheddarTokenize, '}'));
+        let RUN = this.initParser(CheddarCustomParser(parser, '}'));
         let RES = RUN.exec();
 
         this.Index = RES.Index || RUN.Index;
