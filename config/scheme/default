@@ -1,0 +1,6 @@
+[colors]
+prompt=yellow bold
+caret=yellow
+symbol=red
+implicit=magenta
+object=cyan

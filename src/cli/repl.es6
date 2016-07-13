@@ -138,7 +138,7 @@ The following commands are available:
 			console.log(Output.toString().red);
 		}
 		else {
-			console.log(`< Unprintable object of class "${Output.constructor.name.magenta}" with literal value ${Output.magenta} >`.cyan);
+			console.log("< Unprintable object of class ".cyan + Output.constructor.name.magenta + " with literal value " + Output.magenta + " >".cyan);
 		}
 	}
 
