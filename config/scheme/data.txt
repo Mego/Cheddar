@@ -1,0 +1,2 @@
+usage: cheddar config <group>:<property> [value]
+       cheddar config <group>
